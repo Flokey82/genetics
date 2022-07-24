@@ -24,16 +24,7 @@ func (p *Pool) NewRandom() Genes {
 // as baseline and then randomly sets bits that are different in both sets.
 // Additional a number of mutations can be applied which randomly flip bits.
 func (p *Pool) Mix(a, b Genes, nMutations int) Genes {
-	t := uint64(a) & uint64(b)        // common bits
-	x := (uint64(a) | uint64(b)) &^ t // diff bits
-	t |= x & uint64(p.Rand.Int63())   // random diffs
-
-	// Mutations (random bit flips)
-	for i := 0; i < nMutations; i++ {
-		t ^= 1 << p.Rand.Intn(63)
-	}
-
-	return Genes(t)
+	return mix(a, b, nMutations, p.Rand.Int63, p.Rand.Intn)
 }
 
 type Genes uint64
@@ -69,13 +60,20 @@ func (g *Genes) getBits(offs, n int) uint64 {
 // as baseline and then randomly sets bits that are different in both sets.
 // Additional a number of mutations can be applied which randomly flip bits.
 func Mix(a, b Genes, nMutations int) Genes {
+	return mix(a, b, nMutations, rand.Int63, rand.Intn)
+}
+
+type r63 func() int64
+type rIntn func(int) int
+
+func mix(a, b Genes, nMutations int, rnd63 r63, rndIntn rIntn) Genes {
 	t := uint64(a) & uint64(b)        // common bits
 	x := (uint64(a) | uint64(b)) &^ t // diff bits
-	t |= x & uint64(rand.Int63())     // random diffs
+	t |= x & uint64(rnd63())          // random diffs
 
 	// Mutations (random bit flips)
 	for i := 0; i < nMutations; i++ {
-		t ^= 1 << rand.Intn(63)
+		t ^= 1 << rndIntn(63)
 	}
 
 	return Genes(t)
