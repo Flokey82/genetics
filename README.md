@@ -5,7 +5,7 @@ This package provides 64 bit gene sequences as well as the ability to manipulate
 It is nothing fancy, but it does the trick. I have set up an example that encodes some human-ish properties.
 
 ## Example gene layout
-
+```
   _______________________ 2 gender
  || _____________________ 2 eye color
  ||||  __________________ 3 hair color         ___________________________ 4 Openness
@@ -20,3 +20,4 @@ It is nothing fancy, but it does the trick. I have set up an example that encode
  4 intelligence __________________  |||| ||||
  4 dexterity __________________________  ||||
  4 resilience ______________________________
+ ```
