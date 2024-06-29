@@ -91,13 +91,16 @@ var (
 	}
 )
 
+// Gemder represents the gender of a person.
 type Gender int
 
+// The various genders of a person.
 const (
 	GenderMale   Gender = 0x1
 	GenderFemale Gender = 0x3
 )
 
+// String returns a string representation of the gender of a person.
 func (g Gender) String() string {
 	switch g {
 	case GenderMale:
@@ -109,16 +112,20 @@ func (g Gender) String() string {
 	}
 }
 
+// SetGender sets the genetic gender of a person.
 func SetGender(g *genetics.Genes, val Gender) {
 	g.Set(GGender, int(val))
 }
 
+// GetGender returns the gender of a person based on their genes.
 func GetGender(g *genetics.Genes) Gender {
 	return Gender(g.Get(GGender))
 }
 
+// EyeColor represents the eye color of a person.
 type EyeColor int
 
+// The various eye colors of a person.
 const (
 	EyeColorRed   EyeColor = 0x0
 	EyeColorBlue  EyeColor = 0x1
@@ -126,6 +133,7 @@ const (
 	EyeColorBrown EyeColor = 0x3
 )
 
+// String returns a string representation of the eye color of a person.
 func (g EyeColor) String() string {
 	switch g {
 	case EyeColorRed:
@@ -141,16 +149,20 @@ func (g EyeColor) String() string {
 	}
 }
 
+// SetEyeColor sets the eye color of a person based on their genes.
 func SetEyeColor(g *genetics.Genes, val EyeColor) {
 	g.Set(GEyeColor, int(val))
 }
 
+// GetEyeColor returns the eye color of a person based on their genes.
 func GetEyeColor(g *genetics.Genes) EyeColor {
 	return EyeColor(g.Get(GEyeColor))
 }
 
+// HairColor represents the hair color of a person.
 type HairColor int
 
+// The various hair colors of a person.
 const (
 	HairColorBlonde   HairColor = 0x0
 	HairColorRed      HairColor = 0x1
@@ -159,6 +171,7 @@ const (
 	HairColorCurlMask HairColor = 0x4
 )
 
+// SetHairColor sets the hair color of a person based on their genes.
 func SetHairColor(g *genetics.Genes, val HairColor, curls bool) {
 	if curls {
 		val &= HairColorCurlMask
@@ -166,11 +179,13 @@ func SetHairColor(g *genetics.Genes, val HairColor, curls bool) {
 	g.Set(GHairColor, int(val))
 }
 
+// GetHairColor returns the hair color of a person based on their genes.
 func GetHairColor(g *genetics.Genes) (HairColor, bool) {
 	c := HairColor(g.Get(GHairColor))
 	return c & (HairColorCurlMask - 1), c&HairColorCurlMask != 0
 }
 
+// GetHairColorStr returns a string representation of the hair color of a person.
 func GetHairColorStr(g *genetics.Genes) string {
 	b, curl := GetHairColor(g)
 	prfx := "      "
@@ -205,6 +220,8 @@ func (s Attrs) String() string {
 	)
 }
 
+// GetAttrs returns the physical attributes of a person based on their genes.
+// This includes complexion, height, mass, and growth.
 func GetAttrs(g *genetics.Genes) Attrs {
 	return Attrs{
 		Complexion: g.Get(GComplexion),
@@ -214,6 +231,8 @@ func GetAttrs(g *genetics.Genes) Attrs {
 	}
 }
 
+// Stats represents the physical stats of a person.
+// This includes strength, intelligence, dexterity, and resilience.
 type Stats struct {
 	Strength     int
 	Intelligence int
@@ -221,6 +240,7 @@ type Stats struct {
 	Resilience   int
 }
 
+// String returns a string representation of the stats.
 func (s Stats) String() string {
 	return fmt.Sprintf(
 		"Str: %d, Int: %d, Dex: %d, Res: %d",
@@ -228,6 +248,7 @@ func (s Stats) String() string {
 	)
 }
 
+// GetStats returns the stats of a person based on their genes.
 func GetStats(g *genetics.Genes) Stats {
 	return Stats{
 		Strength:     g.Get(GStrength),
@@ -237,31 +258,7 @@ func GetStats(g *genetics.Genes) Stats {
 	}
 }
 
-type FiveFactor struct {
-	Openness          int
-	Conscientiousness int
-	Extraversion      int
-	Agreeableness     int
-	Neuroticism       int
-}
-
-func (s FiveFactor) String() string {
-	return fmt.Sprintf(
-		"O: %d, C: %d, E: %d, A: %d, N: %d",
-		s.Openness, s.Conscientiousness, s.Extraversion, s.Agreeableness, s.Neuroticism,
-	)
-}
-
-func GetFiveFactor(g *genetics.Genes) FiveFactor {
-	return FiveFactor{
-		Openness:          g.Get(GOpenness),
-		Conscientiousness: g.Get(GConscientiousness),
-		Extraversion:      g.Get(GExtraversion),
-		Agreeableness:     g.Get(GAgreeableness),
-		Neuroticism:       g.Get(GNeuroticism),
-	}
-}
-
+// String returns a string representation of a person based on their genes.
 func String(g genetics.Genes) string {
 	var strs []string
 	strs = append(strs, fmt.Sprintf("gender: %s", GetGender(&g)))
