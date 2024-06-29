@@ -145,10 +145,10 @@ func (t Trait) Compare(other Trait) float64 {
 }
 
 const (
-	TraitMax  = 15
-	TraitHigh = TraitMax / 3 * 2
-	TraitMid  = TraitMax / 2
-	TraitLow  = TraitMax / 3
+	TraitMaxVal = 15
+	TraitHigh   = TraitMaxVal / 3 * 2
+	TraitMid    = TraitMaxVal / 2
+	TraitLow    = TraitMaxVal / 3
 )
 
 // GetTraits returns the traits of a person based on their five factor personality.
