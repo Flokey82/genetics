@@ -53,6 +53,10 @@ const (
 	TraitTrusting
 	TraitCruel
 	TraitKind
+	TraitShy
+	TraitGregarious
+	TraitArrogant
+	TraitHumble
 	TraitMax
 )
 
@@ -71,6 +75,10 @@ var traitToString = map[Trait]string{
 	TraitTrusting:   "trusting",
 	TraitCruel:      "cruel",
 	TraitKind:       "kind",
+	TraitShy:        "shy",
+	TraitGregarious: "gregarious",
+	TraitArrogant:   "arrogant",
+	TraitHumble:     "humble",
 }
 
 var traitToOpposite = map[Trait]Trait{
@@ -88,6 +96,10 @@ var traitToOpposite = map[Trait]Trait{
 	TraitTrusting:   TraitParanoid,
 	TraitCruel:      TraitKind,
 	TraitKind:       TraitCruel,
+	TraitShy:        TraitGregarious,
+	TraitGregarious: TraitShy,
+	TraitArrogant:   TraitHumble,
+	TraitHumble:     TraitArrogant,
 }
 
 func (t Trait) String() string {
@@ -207,6 +219,20 @@ func GetTraits(ff FiveFactor) Trait {
 		traits |= TraitCruel
 	} else if ff.Agreeableness > TraitHigh && (ff.Conscientiousness > TraitHigh || ff.Extraversion > TraitHigh) {
 		traits |= TraitKind
+	}
+
+	// Low extraversion and low openness might lead to shyness, while high extraversion and high openness might lead to gregariousness.
+	if ff.Extraversion < TraitLow && ff.Openness < TraitLow {
+		traits |= TraitShy
+	} else if ff.Extraversion > TraitHigh && ff.Openness > TraitHigh {
+		traits |= TraitGregarious
+	}
+
+	// Low agreeableness and high conscientiousness might lead to arrogance, while high agreeableness and high conscientiousness might lead to humility.
+	if ff.Agreeableness < TraitLow && ff.Conscientiousness > TraitHigh {
+		traits |= TraitArrogant
+	} else if ff.Agreeableness > TraitHigh && ff.Conscientiousness > TraitHigh {
+		traits |= TraitHumble
 	}
 
 	return traits
