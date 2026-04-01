@@ -152,6 +152,10 @@ func (t Trait) Compare(other Trait) float64 {
 	// Count how many opposite traits we have.
 	opposites := t.CountOpposites(other)
 
+	if common == 0 && opposites == 0 {
+		return 0
+	}
+
 	diff := common - opposites
 	return float64(diff) / float64(max(common, opposites))
 }
